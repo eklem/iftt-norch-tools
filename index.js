@@ -1,34 +1,32 @@
+// Reading http://openmymind.net/2012/2/3/Node-Require-and-Exports/ to try to figure "exports" out
 // Modules and stuff required
 var jhash = require('jhash')
+require( 'useful-date' )
+require( 'useful-date/locale/en-GB.js' )
+var moment = require('moment')
 
-
-
-// Reading http://openmymind.net/2012/2/3/Node-Require-and-Exports/ to try to figure "exports" out
-
+// Characters and numbers used for hashing
+jhash.setSymbols('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 // Adding and id to JSON object. Usefull for easy updating of index. Will overwrite object in index with equal id.
 var Id = function(date, text, type) {
     // Creating an ID, and adding it to each item
     // Contains jhash of date+text+type strings
-    obj.id = date
-    obj.id += text
-    obj.id += type
-    obj.id = jhash.hash(obj.id)
-    return obj.id
+    id = date
+    id += text
+    id += type
+    id = jhash.hash(id)
+    return id
 }
 
+// Using useful-date (Date-coerse) to give moment something it can work with
+var MachineDate = function(iftttOutputDate) {
+    var datetransform = Date.coerce(iftttOutputDate, 'F d, Y <at> h:iA')
+    date = moment(datetransform).format()
+    return date
+}
 
-// Escaping special characters
-String.prototype.escapeUnescape = function() {
-  return this.replace(/\\n/g, "\\n")
-             .replace(/\\'/g, "\\'")
-             .replace(/\\"/g, '\\"')
-             .replace(/\\&/g, "\\&")
-             .replace(/\\r/g, "\\r")
-             .replace(/\\t/g, "\\t")
-             .replace(/\\b/g, "\\b")
-             .replace(/\\f/g, "\\f");
-};
-
-module.exports.id = Id;
-module.exports.escape = String.prototype.escapeUnescape;
+// Export functions as ifttnt:
+// var ifttnt = require('iftt-norch-tools')
+module.exports.id = Id
+module.exports.date = MachineDate
