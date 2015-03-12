@@ -26,7 +26,50 @@ var MachineDate = function(iftttOutputDate) {
     return date
 }
 
+// Extracting #tags from text,
+// ... removing '#' if #tags exists (not null)
+// ... and converting to lowercase
+var Tags = function(text) {
+    tags = text.match(/#[a-zæøå0-9]+/gi)
+    if (tags != null) {
+        for (var k = 0; k < tags.length; k++) {
+            tags[k] = tags[k].replace(/#/, '').toLowerCase()
+        }
+    }
+    return tags
+}
+
+// Extracting links from text
+var Links = function(text) {
+    links = text.match(/(https?:\/\/)[\S]+/g)
+    return links
+}
+
+// Strip @ from users, change to array and extract users from text before adding to same array
+var TwitterUsers = function(users, text) {
+    // removing @ from user
+    // creating to an array
+    users = users.replace(/@/, '')
+    users = [users]
+    // extract users from text and push to array
+    moreusers = text.match(/@[a-z0-9\_\-]+/gi)
+    if (moreusers != null) {
+      for (var j = 0; j < moreusers.length; j++) {
+        moreusers[j]= moreusers[j].replace(/@/, '')
+         users.push(moreusers[j])
+      }
+    }
+    return users
+}
+
+
+
+
+
 // Export functions as ifttnt:
 // var ifttnt = require('iftt-norch-tools')
 module.exports.id = Id
 module.exports.date = MachineDate
+module.exports.tags = Tags
+module.exports.links = Links
+module.exports.twitterusers = TwitterUsers
