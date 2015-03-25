@@ -19,10 +19,16 @@ var Id = function(date, text, type) {
     return id
 }
 
-// Using useful-date (Date-coerse) to give moment something it can work with
+// Milliseconds since the Unix Epoch. Using useful-date (Date-coerse) to give moment something it can work with
 var MachineDate = function(iftttOutputDate) {
     var datetransform = Date.coerce(iftttOutputDate, 'F d, Y <at> h:iA')
-    date = moment(datetransform).format()
+    date = moment(datetransform).valueOf()
+    return date
+}
+
+// Using useful-date (Date-coerse) to give moment something it can work with
+var ReadableDate = function(unixTime) {
+    date = moment(unixTime).format()
     return date
 }
 
@@ -70,6 +76,7 @@ var TwitterUsers = function(users, text) {
 // var ifttnt = require('iftt-norch-tools')
 module.exports.id = Id
 module.exports.date = MachineDate
+module.exports.datehuman = ReadableDate
 module.exports.tags = Tags
 module.exports.links = Links
 module.exports.twitterusers = TwitterUsers
