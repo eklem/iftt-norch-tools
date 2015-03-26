@@ -68,15 +68,19 @@ var TwitterUsers = function(users, text) {
     return users
 }
 
+// Which item is the newest (give array of Unix dates)
+var FindNewestDate = function(unixdates) {
+    return Math.max.apply(null, unixdates);
+}
 
 
 
-
-// Export functions as ifttnt:
-// var ifttnt = require('iftt-norch-tools')
+// Export functions as ifttnorch:
+// var ifttnorch = require('iftt-norch-tools')
 module.exports.id = Id
 module.exports.date = MachineDate
 module.exports.datehuman = ReadableDate
 module.exports.tags = Tags
 module.exports.links = Links
 module.exports.twitterusers = TwitterUsers
+module.exports.findnewestdate = FindNewestDate
