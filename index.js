@@ -1,9 +1,11 @@
 // Reading http://openmymind.net/2012/2/3/Node-Require-and-Exports/ to try to figure "exports" out
 // Modules and stuff required
 var jhash = require('jhash')
-require( 'useful-date' )
-require( 'useful-date/locale/en-GB.js' )
+require('useful-date')
+require('useful-date/locale/en-GB.js')
 var moment = require('moment')
+var gravatar = require('gravatar')
+var sanitizeHtml = require('sanitize-html')
 
 // Characters and numbers used for hashing
 jhash.setSymbols('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
@@ -68,6 +70,34 @@ var TwitterUsers = function(users, text) {
     return users
 }
 
+var EmailAddress = function(email) {
+    email = email.toLowerCase()
+    return email
+}
+
+// This function is to be changed
+// No matter which source it should return 'Display Name', 'Gravatar' and 'ID'
+// ID will be indexed ID for user type results
+var EmailUser = function(email) {
+    email = email.toLowerCase()
+    user = [email]
+    return user
+}
+
+var EmailGravatar = function(email) {
+    email = email.toLowerCase()
+    gravatarimg = gravatar.url(email, {s: '200', r: 'pg', d: 'wavatar'})
+    return gravatarimg
+}
+
+// Should add some sort of salvaging nordic characters when fucked up
+var SanitizeHtml = function(text) {
+    text = sanitizeHtml(obj.text, {
+        allowedTags: [],
+        allowedAttributes: {}
+    })
+}
+
 // Which item is the newest (give array of Unix dates)
 var FindNewestDate = function(unixdates) {
     return Math.max.apply(null, unixdates);
@@ -83,4 +113,8 @@ module.exports.datehuman = ReadableDate
 module.exports.tags = Tags
 module.exports.links = Links
 module.exports.twitterusers = TwitterUsers
+module.exports.emailaddress = EmailAddress
+module.exports.emailuser = EmailUser
+module.exports.emailgravatar = EmailGravatar
+module.exports.sanitizehtml = SanitizeHtml
 module.exports.findnewestdate = FindNewestDate
