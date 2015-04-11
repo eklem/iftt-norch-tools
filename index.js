@@ -92,10 +92,11 @@ var EmailGravatar = function(email) {
 
 // Should add some sort of salvaging nordic characters when fucked up
 var SanitizeHtml = function(text) {
-    text = sanitizeHtml(obj.text, {
+    text = sanitizeHtml(text, {
         allowedTags: [],
         allowedAttributes: {}
     })
+    return text
 }
 
 // Which item is the newest (give array of Unix dates)
