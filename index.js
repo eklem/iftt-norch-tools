@@ -37,7 +37,7 @@ var ReadableDate = function(unixTime) {
 // Extracting #tags from text,
 // ... removing '#' if #tags exists (not null)
 // ... and converting to lowercase
-var Tags = function(text) {
+var TagsText = function(text) {
     tags = text.match(/#[a-zæøå0-9]+/gi)
     if (tags != null) {
         for (var k = 0; k < tags.length; k++) {
@@ -46,6 +46,14 @@ var Tags = function(text) {
     }
     return tags
 }
+
+// Extracting tags from comma separated list
+var TagsList = function(tags) {
+    if (tags != null) {
+      tags = tags.toLowerCase().split(', ')
+    }
+    return tags
+}   
 
 // Extracting links from text
 var Links = function(text) {
@@ -111,7 +119,8 @@ var FindNewestDate = function(unixdates) {
 module.exports.id = Id
 module.exports.date = MachineDate
 module.exports.datehuman = ReadableDate
-module.exports.tags = Tags
+module.exports.tagstext = TagsText
+module.exports.tagslist = TagsList
 module.exports.links = Links
 module.exports.twitterusers = TwitterUsers
 module.exports.emailaddress = EmailAddress

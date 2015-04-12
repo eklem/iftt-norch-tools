@@ -1,6 +1,6 @@
 {
   "name": "iftt-norch-tools",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "\"If This Then Norch\". Tools for easy document processing and indexing of IFTTT.com-action channels. Created to work with Norch (NOde seaRCH), but can easily be changed to work with other search engines. Outputs JSON.",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,10 @@
     "indexing",
     "ifttt",
     "norch",
-    "search-index"
+    "search-index",
+    "twitter",
+    "gmail",
+    "flickr"
   ],
   "author": "Espen Klem",
   "license": "The MIT License (MIT)",
