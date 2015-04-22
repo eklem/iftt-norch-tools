@@ -94,7 +94,7 @@ var EmailUser = function(email) {
 
 var EmailGravatar = function(email) {
     email = email.toLowerCase()
-    gravatarimg = gravatar.url(email, {s: '200', r: 'pg', d: 'wavatar'})
+    gravatarimg = gravatar.url(email, {s: '200', r: 'pg', d: 'wavatar'}, true)
     return gravatarimg
 }
 
