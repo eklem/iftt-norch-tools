@@ -11,13 +11,10 @@ var sanitizeHtml = require('sanitize-html')
 jhash.setSymbols('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 // Adding and id to JSON object. Usefull for easy updating of index. Will overwrite object in index with equal id.
-var Id = function(date, text, type) {
+var Id = function(input) {
     // Creating an ID, and adding it to each item
     // Contains jhash of date+text+type strings
-    id = date
-    id += text
-    id += type
-    id = jhash.hash(id)
+    id = jhash.hash(input)
     return id
 }
 
@@ -101,8 +98,11 @@ var EmailGravatar = function(email) {
 // Should add some sort of salvaging nordic characters when fucked up
 var SanitizeHtml = function(text) {
     text = sanitizeHtml(text, {
-        allowedTags: [],
-        allowedAttributes: {}
+        allowedTags: [ 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol', 'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div', 'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'img' ],
+        allowedAttributes: {
+            a: [ 'href', 'name', 'target' ],
+            img: [ 'src' ]
+        }
     })
     return text
 }
