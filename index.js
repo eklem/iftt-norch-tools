@@ -19,8 +19,8 @@ var Id = function(input) {
 }
 
 // Milliseconds since the Unix Epoch. Using useful-date (Date-coerse) to give moment something it can work with
-var MachineDate = function(iftttOutputDate) {
-    var datetransform = Date.coerce(iftttOutputDate, 'F d, Y <at> h:iA')
+var MachineDate = function(iftttOutputDate, dayFormat) {
+    var datetransform = Date.coerce(iftttOutputDate, 'F ' + dayFormat + ', Y <at> h:iA')
     date = moment(datetransform).valueOf()
     return date
 }
