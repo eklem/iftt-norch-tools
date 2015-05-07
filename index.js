@@ -6,6 +6,8 @@ require('useful-date/locale/en-GB.js')
 var moment = require('moment')
 var gravatar = require('gravatar')
 var sanitizeHtml = require('sanitize-html')
+var marked = require('marked')
+
 
 // Characters and numbers used for hashing
 jhash.setSymbols('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
@@ -107,6 +109,13 @@ var SanitizeHtml = function(text) {
     return text
 }
 
+var Markdown2Html = function(text) {
+    if(text) {
+        text = marked(text)
+    }
+    return text
+}
+
 // Which item is the newest (give array of Unix dates)
 var FindNewestDate = function(unixdates) {
     return Math.max.apply(null, unixdates);
@@ -127,4 +136,5 @@ module.exports.emailaddress = EmailAddress
 module.exports.emailuser = EmailUser
 module.exports.emailgravatar = EmailGravatar
 module.exports.sanitizehtml = SanitizeHtml
+module.exports.markdown2html = Markdown2Html
 module.exports.findnewestdate = FindNewestDate
