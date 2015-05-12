@@ -1,12 +1,13 @@
 // Reading http://openmymind.net/2012/2/3/Node-Require-and-Exports/ to try to figure "exports" out
 // Modules and stuff required
-var jhash = require('jhash')
-require('useful-date')
-require('useful-date/locale/en-GB.js')
-var moment = require('moment')
-var gravatar = require('gravatar')
-var sanitizeHtml = require('sanitize-html')
-var marked = require('marked')
+var jhash = require('jhash');
+require('useful-date');
+require('useful-date/locale/en-GB.js');
+var moment = require('moment');
+var gravatar = require('gravatar');
+var sanitizeHtml = require('sanitize-html');
+var headline_parser = require("headline-parser");
+var markdown = require( "markdown" ).markdown;
 
 
 // Characters and numbers used for hashing
@@ -22,9 +23,13 @@ var Id = function(input) {
 
 // Milliseconds since the Unix Epoch. Using useful-date (Date-coerse) to give moment something it can work with
 var MachineDate = function(iftttOutputDate, dayFormat) {
-    var datetransform = Date.coerce(iftttOutputDate, 'F ' + dayFormat + ', Y <at> h:iA')
-    date = moment(datetransform).valueOf()
-    return date
+    try {
+        var datetransform = Date.coerce(iftttOutputDate, 'F ' + dayFormat + ', Y <at> h:iA')
+        date = moment(datetransform).valueOf()
+        return date
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 // Using useful-date (Date-coerse) to give moment something it can work with
@@ -86,34 +91,36 @@ var EmailAddress = function(email) {
 // No matter which source it should return 'Display Name', 'Gravatar' and 'ID'
 // ID will be indexed ID for user type results
 var EmailUser = function(email) {
-    email = email.toLowerCase()
-    user = [email]
-    return user
+    email = email.toLowerCase();
+    user = [email];
+    return user;
 }
 
 var EmailGravatar = function(email) {
-    email = email.toLowerCase()
-    gravatarimg = gravatar.url(email, {s: '200', r: 'pg', d: 'wavatar'}, true)
-    return gravatarimg
+    email = email.toLowerCase();
+    gravatarimg = gravatar.url(email, {s: '200', r: 'pg', d: 'wavatar'}, true);
+    return gravatarimg;
 }
 
 // Should add some sort of salvaging nordic characters when fucked up
-var SanitizeHtml = function(text) {
+var SanitizeHtml = function(text, tags, attributes) {
     text = sanitizeHtml(text, {
-        allowedTags: [ 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol', 'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div', 'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'img' ],
-        allowedAttributes: {
-            a: [ 'href', 'name', 'target' ],
-            img: [ 'src' ]
-        }
-    })
-    return text
+        allowedTags: tags,
+        allowedAttributes: attributes
+    });
+    return text;
+}
+
+var AutoTagger = function(title, text) {
+    var important_keywords = headline_parser.findKeywords(title, text, 2);
+    return important_keywords;
 }
 
 var Markdown2Html = function(text) {
     if(text) {
-        text = marked(text)
+        text = markdown.toHTML( text );
     }
-    return text
+    return text;
 }
 
 // Which item is the newest (give array of Unix dates)
@@ -125,16 +132,17 @@ var FindNewestDate = function(unixdates) {
 
 // Export functions as ifttnorch:
 // var ifttnorch = require('iftt-norch-tools')
-module.exports.id = Id
-module.exports.date = MachineDate
-module.exports.datehuman = ReadableDate
-module.exports.tagstext = TagsText
-module.exports.tagslist = TagsList
-module.exports.links = Links
-module.exports.twitterusers = TwitterUsers
-module.exports.emailaddress = EmailAddress
-module.exports.emailuser = EmailUser
-module.exports.emailgravatar = EmailGravatar
-module.exports.sanitizehtml = SanitizeHtml
-module.exports.markdown2html = Markdown2Html
-module.exports.findnewestdate = FindNewestDate
+module.exports.id = Id;
+module.exports.date = MachineDate;
+module.exports.datehuman = ReadableDate;
+module.exports.tagstext = TagsText;
+module.exports.tagslist = TagsList;
+module.exports.links = Links;
+module.exports.twitterusers = TwitterUsers;
+module.exports.emailaddress = EmailAddress;
+module.exports.emailuser = EmailUser;
+module.exports.emailgravatar = EmailGravatar;
+module.exports.sanitizehtml = SanitizeHtml;
+module.exports.autotagger = AutoTagger;
+module.exports.markdown2html = Markdown2Html;
+module.exports.findnewestdate = FindNewestDate;
