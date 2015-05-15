@@ -112,7 +112,7 @@ var SanitizeHtml = function(text, tags, attributes) {
 }
 
 var AutoTagger = function(title, text) {
-    var important_keywords = headline_parser.findKeywords(title, text, 2);
+    var important_keywords = headline_parser.findKeywords(title, text, 4, {language:"english", return_changed_case:true}, {returnNonMatched:true});
     return important_keywords;
 }
 
