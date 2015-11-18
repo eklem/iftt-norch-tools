@@ -52,16 +52,22 @@ var TagsText = function(text) {
 }
 
 // Extracting tags from comma separated list
-var TagsList = function(tags) {
-    if (tags != null) {
+// Default case is false, you need to set true to do anything.
+var TagsList = function(tags, lowercase) {
+    if (tags != null && lowercase == true ) {
       tags = tags.toLowerCase().split(', ')
+    }
+    else if (tags != null) {
+      tags = tags.split(', ')
     }
     return tags
 }   
 
 // Extracting links from text
 var Links = function(text) {
-    links = text.match(/(https?:\/\/)[\S]+/g)
+    if (links != null) {
+      links = links.match(/(https?:\/\/)[^,][\S]+/g)
+    }
     return links
 }
 
