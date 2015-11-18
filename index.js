@@ -7,14 +7,14 @@ var moment = require('moment');
 var gravatar = require('gravatar');
 var sanitizeHtml = require('sanitize-html');
 var headline_parser = require("headline-parser");
-var markdown = require( "markdown" ).markdown;
+var markdown = require("markdown").markdown;
 
 
 // Characters and numbers used for hashing
 jhash.setSymbols('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 // Adding and id to JSON object. Usefull for easy updating of index. Will overwrite object in index with equal id.
-var Id = function(input) {
+var Id = function (input) {
     // Creating an ID, and adding it to each item
     // Contains jhash of date+text+type strings
     id = jhash.hash(input)
@@ -22,7 +22,7 @@ var Id = function(input) {
 }
 
 // Milliseconds since the Unix Epoch. Using useful-date (Date-coerse) to give moment something it can work with
-var MachineDate = function(iftttOutputDate, dayFormat) {
+var MachineDate = function (iftttOutputDate, dayFormat) {
     try {
         var datetransform = Date.coerce(iftttOutputDate, 'F ' + dayFormat + ', Y <at> h:iA')
         date = moment(datetransform).valueOf()
@@ -33,7 +33,7 @@ var MachineDate = function(iftttOutputDate, dayFormat) {
 }
 
 // Using useful-date (Date-coerse) to give moment something it can work with
-var ReadableDate = function(unixTime) {
+var ReadableDate = function (unixTime) {
     date = moment(unixTime).format()
     return date
 }
@@ -41,7 +41,7 @@ var ReadableDate = function(unixTime) {
 // Extracting #tags from text,
 // ... removing '#' if #tags exists (not null)
 // ... and converting to lowercase
-var TagsText = function(text) {
+var TagsText = function (text) {
     tags = text.match(/#[a-zæøå0-9]+/gi)
     if (tags != null) {
         for (var k = 0; k < tags.length; k++) {
@@ -53,63 +53,66 @@ var TagsText = function(text) {
 
 // Extracting tags from comma separated list
 // Default case is false, you need to set true to do anything.
-var TagsList = function(tags, lowercase) {
-    if (tags != null && lowercase == true ) {
-      tags = tags.toLowerCase().split(', ')
-    }
-    else if (tags != null) {
-      tags = tags.split(', ')
+var TagsList = function (tags, lowercase) {
+    if (tags != null && lowercase == true) {
+        tags = tags.toLowerCase().split(', ')
+    } else if (tags != null) {
+        tags = tags.split(', ')
     }
     return tags
-}   
+}
 
 // Extracting links from text
-var Links = function(text) {
+var Links = function (links) {
     if (links != null) {
-      links = links.match(/(https?:\/\/)[^,][\S]+/g)
+        links = links.match(/(https?:\/\/)[^,][\S]+/g);
     }
-    return links
+    return links;
 }
 
 // Strip @ from users, change to array and extract users from text before adding to same array
-var TwitterUsers = function(users, text) {
+var TwitterUsers = function (users, text) {
     // removing @ from user
     // creating to an array
     users = users.replace(/@/, '')
     users = [users]
-    // extract users from text and push to array
+        // extract users from text and push to array
     moreusers = text.match(/@[a-z0-9\_\-]+/gi)
     if (moreusers != null) {
-      for (var j = 0; j < moreusers.length; j++) {
-        moreusers[j]= moreusers[j].replace(/@/, '')
-         users.push(moreusers[j])
-      }
+        for (var j = 0; j < moreusers.length; j++) {
+            moreusers[j] = moreusers[j].replace(/@/, '')
+            users.push(moreusers[j])
+        }
     }
-    return users
+    return users;
 }
 
-var EmailAddress = function(email) {
-    email = email.toLowerCase()
-    return email
+var EmailAddress = function (email) {
+    email = email.toLowerCase();
+    return email;
 }
 
 // This function is to be changed
 // No matter which source it should return 'Display Name', 'Gravatar' and 'ID'
 // ID will be indexed ID for user type results
-var EmailUser = function(email) {
+var EmailUser = function (email) {
     email = email.toLowerCase();
     user = [email];
     return user;
 }
 
-var EmailGravatar = function(email) {
+var EmailGravatar = function (email) {
     email = email.toLowerCase();
-    gravatarimg = gravatar.url(email, {s: '200', r: 'pg', d: 'wavatar'}, true);
+    gravatarimg = gravatar.url(email, {
+        s: '200',
+        r: 'pg',
+        d: 'wavatar'
+    }, true);
     return gravatarimg;
 }
 
 // Should add some sort of salvaging nordic characters when fucked up
-var SanitizeHtml = function(text, tags, attributes) {
+var SanitizeHtml = function (text, tags, attributes) {
     text = sanitizeHtml(text, {
         allowedTags: tags,
         allowedAttributes: attributes
@@ -117,20 +120,25 @@ var SanitizeHtml = function(text, tags, attributes) {
     return text;
 }
 
-var AutoTagger = function(title, text) {
-    var important_keywords = headline_parser.findKeywords(title, text, 4, {language:"english", return_changed_case:true}, {returnNonMatched:true});
+var AutoTagger = function (title, text) {
+    var important_keywords = headline_parser.findKeywords(title, text, 4, {
+        language: "english",
+        return_changed_case: true
+    }, {
+        returnNonMatched: true
+    });
     return important_keywords;
 }
 
-var Markdown2Html = function(text) {
-    if(text) {
-        text = markdown.toHTML( text );
+var Markdown2Html = function (text) {
+    if (text) {
+        text = markdown.toHTML(text);
     }
     return text;
 }
 
 // Which item is the newest (give array of Unix dates)
-var FindNewestDate = function(unixdates) {
+var FindNewestDate = function (unixdates) {
     return Math.max.apply(null, unixdates);
 }
 
