@@ -6,7 +6,7 @@ require('useful-date/locale/en-GB.js');
 var moment = require('moment');
 var gravatar = require('gravatar');
 var sanitizeHtml = require('sanitize-html');
-var headline_parser = require("headline-parser");
+var headline_parser = require("eklem-headline-parser");
 var markdown = require("markdown").markdown;
 
 
@@ -25,17 +25,17 @@ var Id = function (input) {
 var MachineDate = function (iftttOutputDate, dayFormat) {
     try {
         var datetransform = Date.coerce(iftttOutputDate, 'F ' + dayFormat + ', Y <at> h:iA')
-        date = moment(datetransform).valueOf()
-        return date
+        date = moment(datetransform).valueOf();
+        return date;
     } catch (err) {
         console.log(err);
     }
 }
 
-// Using useful-date (Date-coerse) to give moment something it can work with
+// Using moment to create a readable date from unixTime
 var ReadableDate = function (unixTime) {
-    date = moment(unixTime).format()
-    return date
+    date = moment(unixTime).format();
+    return date;
 }
 
 // Extracting #tags from text,
@@ -65,7 +65,7 @@ var TagsList = function (tags, lowercase) {
 // Extracting links from text
 var Links = function (links) {
     if (links != null) {
-        links = links.match(/(https?:\/\/)[^,][\S]+/g);
+        links = links.match(/(https?:\/\/)[\S][^(,|,\s|\s)]+/g);
     }
     return links;
 }
