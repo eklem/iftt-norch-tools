@@ -13,7 +13,7 @@
     "dependencies": {
         "jhash": "~0.1.7",
         "useful-date": "~0.0.6",
-        "moment": "~2.10.6",
+        "moment": "~2.19.3",
         "gravatar": "~1.4.0",
         "sanitize-html": "~1.11.2",
         "eklem-headline-parser": "~1.0.2",
